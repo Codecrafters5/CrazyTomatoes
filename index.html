@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home/Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      color: red;
+      font-family: 'Work Sans', sans-serif;
+    }
+    center{
+      margin-top: 200px;
+    }
+    body{
+      background: #112;
+    }
+    button{
+      width: 150px;
+      height: 30px;
+      font-size: 15px;
+      background: none;
+      border: 1px darkred solid;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    button:hover{
+      transform: scale(1.1);
+      background: red;
+      color: #fff;
+      box-shadow: 2px 2px 7px red;
+      transition: 1s;
+    }
+    span{
+      transform: scale(11.1);
+    }
+   .obstacles{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 280px;
+    animation: obstacle 5s linear infinite;
+  }
+  @keyframes obstacle{
+    0%{
+      transform: translateX(0);
+    }
+    100%{
+      transform: translateX(45vh);
+    }
+  }
+  .obstacle{
+    position: absolute;
+    top: 100px;
+    left: 0px;
+    bottom: 0px;
+    animation: obstaclee 5s linear infinite;
+  }
+  @keyframes obstaclee{
+    0%{
+      transform: translateX(0);
+    }
+    100%{
+      transform: translateX(45vh);
+    }""
+  }
+  </style>
+</head>
+<body>
+  <center>
+   <h1>Crazy Tomato</h1>
+   <a href="game.html"><button>Play</button></a>
+   <div class="obstacles">
+     <img src="rotten-tomatoes-adesivo-removebg-preview-removebg-preview.png" width="70px">
+   </div>
+   <div class="obstacle">
+     <img src="rotten-tomatoes-adesivo-removebg-preview-removebg-preview.png" width="70px">
+   </div>
+  </center>
+  <script>
+var currentPosition = 0;
+var image = document.querySelector("#image");
+var score = 0;
+var scoreElement = document.querySelector(".score");
+var gameContainer = document.querySelector("#game-container");
+
+function moveLeft() {
+  if (currentPosition > -60) {
+    currentPosition -= 15;
+    image.style.left = currentPosition + "px";
+  }
+}
+
+function moveRight() {
+  if (currentPosition > -70) {
+    currentPosition += 20;
+    image.style.left = "calc(80% - " + currentPosition + "px)"; // use calc to subtract currentPosition from 50%
+  }
+}
+
+function updateScore() {
+  score++;
+  scoreElement.textContent = score;
+}
+
+function checkCollision() {
+  var obstacles = document.querySelectorAll(".obstacle");
+  obstacles.forEach(function (obstacle) {
+    var obstacleRect = obstacle.getBoundingClientRect();
+    var imageRect = image.getBoundingClientRect();
+    if (
+      obstacleRect.bottom >= imageRect.top &&
+      obstacleRect.left <= imageRect.right &&
+      obstacleRect.right >= imageRect.left
+    ) {
+      clearInterval(intervalId);
+      gameContainer.style.display = "none";
+      document.write("Game over! Your score is " + score).style.color = "";
+    }
+  });
+}
+
+function generateObstacle() {
+  var obstacle = document.createElement("div");
+  obstacle.classList.add("obstacle");
+  var obstacleLeft = Math.random() * 320 - 160;
+  obstacle.style.left = obstacleLeft + "px";
+  gameContainer.appendChild(obstacle);
+  setTimeout(function () {
+    obstacle.remove();
+  }, 3000);
+}
+
+var intervalId = setInterval(function () {
+  generateObstacle();
+  updateScore();
+  checkCollision();
+}, 1000);
+  </script>
+</body>
+</html>

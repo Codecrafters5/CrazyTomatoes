@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  <title>Cool Game</title>
+  <style>
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body{
+    background-image:url(dad51fw-3f6b8908-59fd-4d8f-a27c-8e610b111bf1.png);
+    background-size: cover;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    font-family: 'Work Sans', sans-serif;
+  }
+  button{
+    width: 80px;
+    height: 40px;
+    color: #fff;
+    background: dodgerblue;
+    cursor: pointer;
+    font-size: 20px;
+    border: none;
+    border-radius: 4px;
+    position: fixed;
+    margin-left: 100px;
+    bottom: 10px;
+    top: 50%;
+  }
+  .btns{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+  }
+  img{
+    position: absolute;
+    margin-top: 250px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: left 0.5s ease;
+  }
+  .obstacle{
+    display:flex;
+    justify-content: center;
+    background-image:url(enemy.png);
+    background-size: 100px;
+    background-repeat: no-repeat;
+    width:100PX;
+    bottom: 0;
+    top: 0;
+    position: absolute;
+    margin-left: 50%;
+    animation: obstacle 8s linear infinite;
+  }
+  @keyframes obstacle{
+    0%{
+      transform: translateY(0);
+    }
+    100%{
+      transform: translateY(100vh);
+    }
+  }
+  h2{
+    color: red;
+    margin-top: 10px;
+  }
+  .score{
+    position: absolute;
+    top: 10px;
+    align-items: center;
+    justify-content: space-around ;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .score h2{
+    margin-left
+  }
+
+
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <img id="image" src="player.png"width="100px">
+   <center>
+    <div class="obstacle" style="margin-left:40%;"></div>
+    <h1><span>C</span><spa>r</spa>azyTomato<spa>e</spa><span>s</span></h1>
+</center>
+    <div class="btns">
+     <button id="left" style="margin-right: 170px" onclick="moveLeft()">Left</button>
+      <button id="right" onclick="moveRight()">Right</button>
+    </div>
+    <h2>Score: <span class="score">0</span></h2>
+  </div>
+
+<script>
+var currentPosition = 0;
+var image = document.querySelector("#image");
+var score = 0;
+var scoreElement = document.querySelector(".score");
+var gameContainer = document.querySelector("#game-container");
+
+function moveLeft() {
+  if (currentPosition > -10) {
+    currentPosition -= 1;
+    image.style.left = currentPosition + "px";
+  }
+}
+
+function moveRight() {
+  if (currentPosition > -60) {
+    currentPosition += 15;
+    image.style.left = "calc(80% - " + currentPosition + "px)"; // use calc to subtract currentPosition from 50%
+  }
+}
+
+function updateScore() {
+  score++;
+  scoreElement.textContent = score;
+}
+
+function checkCollision() {
+  var obstacles = document.querySelectorAll(".obstacle");
+  obstacles.forEach(function (obstacle) {
+    var obstacleRect = obstacle.getBoundingClientRect();
+    var imageRect = image.getBoundingClientRect();
+    if (
+      obstacleRect.bottom >= imageRect.top &&
+      obstacleRect.left <= imageRect.right &&
+      obstacleRect.right >= imageRect.left
+    ) {
+      clearInterval(intervalId);
+      gameContainer.style.display = "none";
+      document.write("Game over! Your score is " + score).style.color = "";
+    }
+  });
+}
+
+function generateObstacle() {
+  var obstacle = document.createElement("div");
+  obstacle.classList.add("obstacle");
+  var obstacleLeft = Math.random() * 320 - 160;
+  obstacle.style.left = obstacleLeft + "px";
+  gameContainer.appendChild(obstacle);
+  setTimeout(function () {
+    obstacle.remove();
+  }, 3000);
+}
+
+var intervalId = setInterval(function () {
+  generateObstacle();
+  updateScore();
+  checkCollision();
+}, 1000);
+  </script>
+</script>
+
+</body>
+</html>
